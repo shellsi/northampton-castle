@@ -3,6 +3,9 @@
 Status: draft v0.1 · Companion to [`research.md`](research.md) (source keys such as [HER-IB]
 refer to that file).
 
+The first build is a personal web app, including phones, with captions and no narration.
+The model in that app is a schematic of the dimensions below, not a measured survey.
+
 ## 1. Vision
 
 Almost nothing of Northampton Castle survives. It was once one of England's foremost royal

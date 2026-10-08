@@ -1,16 +1,25 @@
-# Northampton Castle — 3D Interactive History
+# Northampton Castle
 
-Planning documents for a browser-based 3D experience that reconstructs Northampton Castle
-(c.1084–1879) and lets visitors move through nine centuries of the site's history, from Saxon
-earthworks to today's railway station.
+A browser history of Northampton Castle, the royal castle west of medieval Northampton that the railway demolished in 1879. Drag the model, move through nine moments from about 1050 to the station that stands there now, and follow four captioned stories. Nothing is read aloud.
 
-## Documents
+The model is a schematic. The inner bailey uses the recorded size of about 148 by 99 metres, and every place is marked by how it is known: still standing, excavated, recorded before demolition, named in documents, or inferred. It is not a measured survey.
 
-- [`docs/research.md`](docs/research.md): sourced research notes covering the castle's layout,
-  timeline, people, surviving remains, and conflicts in the evidence.
-- [`docs/design.md`](docs/design.md): the design document covering vision, experience,
-  evidence layer, content model, 3D approach, interface, technical architecture, delivery plan
-  and risks.
+The research notes and the design are in [`docs/research.md`](docs/research.md) and [`docs/design.md`](docs/design.md).
 
-No code yet. The design proposes Next.js + React Three Fiber, with historical content held in
-YAML data files.
+## Run it
+
+```bash
+npm install
+npm run dev -- -p 43217
+```
+
+Open [http://127.0.0.1:43217](http://127.0.0.1:43217).
+
+On a phone: one finger orbits, pinch zooms. The Places button lists everything you can open in the current year, which is easier than tapping the stakes.
+
+## Keys
+
+- Left and right arrows move through the years, or through a story if one is playing
+- `E` toggles the evidence colours
+- `C` lays today over the castle, or the castle of about 1300 over today
+- Space pauses a story
