@@ -2,102 +2,192 @@
 
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { BAILEY_D, BAILEY_W, HD, HW, type Confidence } from "@/content/site";
+import { GATE_ANGLE, INNER_RX, INNER_RZ, onRing } from "@/content/plan";
+import { type Confidence } from "@/content/site";
 import { Mat, Tint } from "@/components/castle/materials";
 
 export function Ground() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[40, -0.05, 0]} receiveShadow>
-      <planeGeometry args={[780, 620]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[16, -0.05, 36]} receiveShadow>
+      <planeGeometry args={[860, 720]} />
       <Mat kind="grass" evidenceAware={false} side={THREE.DoubleSide} />
     </mesh>
   );
 }
 
+const riverCourse: [number, number][] = [
+  [-158, -190],
+  [-142, -110],
+  [-128, -30],
+  [-138, 50],
+  [-152, 140],
+  [-164, 210],
+];
+
 export function River() {
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0.08]} position={[-168, -0.35, 10]}>
-        <planeGeometry args={[70, 520]} />
-        <Mat kind="water" evidenceAware={false} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0.2]} position={[-128, -0.3, 30]}>
-        <planeGeometry args={[28, 360]} />
-        <Mat kind="water" evidenceAware={false} side={THREE.DoubleSide} />
-      </mesh>
+      {riverCourse.slice(0, -1).map(([x, z], index) => {
+        const [x2, z2] = riverCourse[index + 1];
+        const dx = x2 - x;
+        const dz = z2 - z;
+        const length = Math.hypot(dx, dz) + 8;
+        const rotation = Math.atan2(dx, dz);
+        return (
+          <mesh
+            key={index}
+            rotation={[-Math.PI / 2, 0, rotation]}
+            position={[(x + x2) / 2, 0.02, (z + z2) / 2]}
+          >
+            <planeGeometry args={[index === 1 ? 36 : 26, length]} />
+            <Mat kind="water" evidenceAware={false} side={THREE.DoubleSide} />
+          </mesh>
+        );
+      })}
     </group>
   );
 }
 
-export function Courtyard() {
+export function useEllipseGeometry(rx: number, rz: number) {
+  return useMemo(() => {
+    const shape = new THREE.Shape();
+    shape.absellipse(0, 0, rx, rz, 0, Math.PI * 2, false, 0);
+    const geometry = new THREE.ShapeGeometry(shape, 48);
+    geometry.rotateX(-Math.PI / 2);
+    return geometry;
+  }, [rx, rz]);
+}
+
+export function Courtyard({ rx = INNER_RX - 3, rz = INNER_RZ - 3 }: { rx?: number; rz?: number }) {
+  const geometry = useEllipseGeometry(rx, rz);
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.06, 0]} receiveShadow>
-      <planeGeometry args={[BAILEY_W - 2, BAILEY_D - 2]} />
+    <mesh geometry={geometry} position={[0, 0.06, 0]} receiveShadow>
       <Mat kind="grass" confidence="excavated" side={THREE.DoubleSide} />
     </mesh>
   );
 }
 
-export function Ramparts({ height }: { height: number }) {
-  const thick = 14;
-  const y = height / 2;
-  const runs: [number, number, number, number, number, number][] = [
-    [0, y, -HD - thick / 2, BAILEY_W, height, thick],
-    [0, y, HD + thick / 2, BAILEY_W, height, thick],
-    [HW + thick / 2, y, 0, thick, height, BAILEY_D + thick * 2],
-    [-HW - thick / 2, y, 0, thick, height, BAILEY_D + thick * 2],
-  ];
+export type RingSegment = {
+  x: number;
+  z: number;
+  length: number;
+  rotation: number;
+  angle: number;
+};
+
+export function ringSegments(
+  rx: number,
+  rz: number,
+  count: number,
+  center: [number, number] = [0, 0],
+): RingSegment[] {
+  const segments: RingSegment[] = [];
+  for (let index = 0; index < count; index += 1) {
+    const a0 = (index / count) * Math.PI * 2;
+    const a1 = ((index + 1) / count) * Math.PI * 2;
+    const [x0, z0] = onRing(a0, rx, rz);
+    const [x1, z1] = onRing(a1, rx, rz);
+    const dx = x1 - x0;
+    const dz = z1 - z0;
+    segments.push({
+      x: (x0 + x1) / 2 + center[0],
+      z: (z0 + z1) / 2 + center[1],
+      length: Math.hypot(dx, dz) + 1.1,
+      rotation: Math.atan2(-dz, dx),
+      angle: (a0 + a1) / 2,
+    });
+  }
+  return segments;
+}
+
+export function RingBank({
+  rx,
+  rz,
+  height,
+  thickness = 12,
+  center = [0, 0],
+  confidence = "excavated",
+}: {
+  rx: number;
+  rz: number;
+  height: number;
+  thickness?: number;
+  center?: [number, number];
+  confidence?: Confidence;
+}) {
+  const segments = useMemo(
+    () => ringSegments(rx, rz, 28, center),
+    [center, rx, rz],
+  );
   return (
     <group>
-      {runs.map((run, index) => (
-        <mesh key={index} position={[run[0], run[1], run[2]]} receiveShadow>
-          <boxGeometry args={[run[3], run[4], run[5]]} />
-          <Mat kind="earth" confidence="excavated" />
+      {segments.map((segment, index) => (
+        <mesh
+          key={index}
+          position={[segment.x, height / 2, segment.z]}
+          rotation={[0, segment.rotation, 0]}
+          receiveShadow
+        >
+          <boxGeometry args={[segment.length, height, thickness]} />
+          <Mat kind="earth" confidence={confidence} />
         </mesh>
       ))}
     </group>
   );
 }
 
-export function Moat({ scale = 1 }: { scale?: number }) {
-  const thick = 14;
-  const ditch = 20 * scale;
-  const northZ = -HD - thick - 3 - ditch / 2;
-  const southZ = HD + thick + 3 + ditch / 2;
-  const eastX = HW + thick + 3 + ditch / 2;
-  const span = BAILEY_W + thick * 2 + ditch;
-  const depthSpan = BAILEY_D + thick * 2 + 6;
+export function RingDitch({
+  rx,
+  rz,
+  width = 16,
+  center = [0, 0],
+  from,
+  to,
+}: {
+  rx: number;
+  rz: number;
+  width?: number;
+  center?: [number, number];
+  from?: number;
+  to?: number;
+}) {
+  const segments = useMemo(() => {
+    return ringSegments(rx, rz, 32, center).filter((segment) => {
+      if (from === undefined || to === undefined) return true;
+      return segment.angle >= from && segment.angle <= to;
+    });
+  }, [center, from, rx, rz, to]);
   return (
     <group>
-      <mesh position={[0, -2.4, northZ]}>
-        <boxGeometry args={[span, 0.35, ditch]} />
-        <Mat kind="water" confidence="excavated" side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0, -2.4, southZ]}>
-        <boxGeometry args={[span, 0.35, ditch]} />
-        <Mat kind="water" confidence="excavated" side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[eastX, -2.4, 0]}>
-        <boxGeometry args={[ditch, 0.35, depthSpan]} />
-        <Mat kind="water" confidence="excavated" side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[-eastX, -2.4, 0]}>
-        <boxGeometry args={[ditch, 0.35, depthSpan]} />
-        <Mat kind="water" confidence="excavated" side={THREE.DoubleSide} />
-      </mesh>
+      {segments.map((segment, index) => (
+        <mesh
+          key={index}
+          position={[segment.x, 0.08, segment.z]}
+          rotation={[0, segment.rotation, 0]}
+        >
+          <boxGeometry args={[segment.length, 0.35, width]} />
+          <Mat kind="water" confidence="excavated" side={THREE.DoubleSide} />
+        </mesh>
+      ))}
     </group>
   );
 }
 
 export function Causeway({ timber = false }: { timber?: boolean }) {
-  const length = timber ? 22 : 40;
+  const length = timber ? 20 : 36;
+  const [gx, gz] = onRing(GATE_ANGLE);
+  const dirX = Math.sin(GATE_ANGLE);
+  const dirZ = -Math.cos(GATE_ANGLE);
+  const rotation = Math.atan2(-dirZ, dirX);
   return (
-    <mesh position={[0, 0.2, -HD - 8 - length / 2]} castShadow receiveShadow>
-      <boxGeometry args={[timber ? 4.5 : 8, 0.55, length]} />
-      <Mat
-        kind={timber ? "timber" : "earth"}
-        confidence={timber ? "inferred" : "documented"}
-      />
+    <mesh
+      position={[gx + dirX * (length / 2 + 3), 0.25, gz + dirZ * (length / 2 + 3)]}
+      rotation={[0, rotation, 0]}
+      castShadow
+      receiveShadow
+    >
+      <boxGeometry args={[length, 0.55, timber ? 4.5 : 8]} />
+      <Mat kind={timber ? "timber" : "earth"} confidence={timber ? "inferred" : "documented"} />
     </mesh>
   );
 }
@@ -286,25 +376,26 @@ export function Block({
   );
 }
 
-export function Palisade({ width, depth }: { width: number; depth: number }) {
+export function Palisade({
+  rx,
+  rz,
+  gate = false,
+}: {
+  rx: number;
+  rz: number;
+  gate?: boolean;
+}) {
   const posts = useMemo(() => {
+    const count = Math.max(24, Math.floor((Math.PI * (rx + rz)) / 0.9));
     const points: { x: number; z: number }[] = [];
-    const edges = [
-      [-width / 2, -depth / 2, width / 2, -depth / 2],
-      [width / 2, -depth / 2, width / 2, depth / 2],
-      [width / 2, depth / 2, -width / 2, depth / 2],
-      [-width / 2, depth / 2, -width / 2, -depth / 2],
-    ];
-    for (const [x1, z1, x2, z2] of edges) {
-      const length = Math.hypot(x2 - x1, z2 - z1);
-      const steps = Math.floor(length / 0.85);
-      for (let step = 0; step < steps; step++) {
-        const t = step / steps;
-        points.push({ x: x1 + (x2 - x1) * t, z: z1 + (z2 - z1) * t });
-      }
+    for (let index = 0; index < count; index += 1) {
+      const angle = (index / count) * Math.PI * 2;
+      if (gate && Math.abs(angle - GATE_ANGLE) < 0.16) continue;
+      const [x, z] = onRing(angle, rx, rz);
+      points.push({ x, z });
     }
     return points;
-  }, [width, depth]);
+  }, [gate, rx, rz]);
   const ref = useRef<THREE.InstancedMesh>(null);
   useLayoutEffect(() => {
     const mesh = ref.current;
@@ -342,7 +433,11 @@ export function Trees({
     for (let index = 0; index < count; index++) {
       const x = origin[0] - spread[0] / 2 + ((index * 47) % spread[0]);
       const z = origin[2] - spread[1] / 2 + ((index * 29) % spread[1]);
-      if (Math.abs(x) < 22 && Math.abs(z + 6) < 18) continue;
+      const nx = x / (INNER_RX - 6);
+      const nz = z / (INNER_RZ - 6);
+      if (nx * nx + nz * nz > 1) continue;
+      if (Math.abs(x - 50) < 14 && Math.abs(z - 6) < 18) continue;
+      if (Math.abs(x + 24) < 12 && Math.abs(z - 12) < 10) continue;
       points.push({ x, z, h: 3.2 + (index % 4) * 0.7 });
     }
     return points;

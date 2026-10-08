@@ -96,7 +96,6 @@ export function Experience() {
   const beatIndex = useCastle((state) => state.beatIndex);
   const playing = useCastle((state) => state.playing);
   const intro = useCastle((state) => state.intro);
-  const keepSite = useCastle((state) => state.keepSite);
   const setEra = useCastle((state) => state.setEra);
   const toggleEvidence = useCastle((state) => state.toggleEvidence);
   const setCompareOn = useCastle((state) => state.setCompareOn);
@@ -108,7 +107,6 @@ export function Experience() {
   const prevBeat = useCastle((state) => state.prevBeat);
   const setPlaying = useCastle((state) => state.setPlaying);
   const dismissIntro = useCastle((state) => state.dismissIntro);
-  const setKeepSite = useCastle((state) => state.setKeepSite);
   const resetCamera = useCastle((state) => state.resetCamera);
 
   useEffect(() => {
@@ -312,7 +310,7 @@ export function Experience() {
               ))}
             </div>
             <p className="px-1 pt-1 text-[11px] text-muted-foreground">
-              North is the gate, the river is west. Schematic, not a measured survey.
+              Hall to the east, outer bailey to the south. Traced from a MOLA plan.
             </p>
           </div>
         </div>
@@ -381,27 +379,6 @@ export function Experience() {
                   </p>
                   <p className="leading-relaxed">{hotspot.summary}</p>
                   <p className="leading-relaxed text-muted-foreground">{hotspot.detail}</p>
-                  {hotspot.id === "keep" && (
-                    <div className="flex flex-col gap-2">
-                      <p className="text-sm font-medium">Try the other idea</p>
-                      <div className="flex gap-2">
-                        <Button
-                          variant={keepSite === "nw" ? "default" : "outline"}
-                          className="h-10"
-                          onClick={() => setKeepSite("nw")}
-                        >
-                          North-west mound
-                        </Button>
-                        <Button
-                          variant={keepSite === "ne" ? "default" : "outline"}
-                          className="h-10"
-                          onClick={() => setKeepSite("ne")}
-                        >
-                          North-east bank
-                        </Button>
-                      </div>
-                    </div>
-                  )}
                   <Separator />
                   <ul className="flex flex-col gap-1 text-sm">
                     {hotspot.sources.map((source) => (
@@ -493,10 +470,11 @@ export function Experience() {
             </DialogHeader>
             <div className="flex flex-col gap-3 text-sm leading-relaxed">
               <p>
-                The inner bailey is drawn at the recorded size of about 148 by 99 metres. The
-                ditch is about 27 metres wide. Buildings whose exact footprints were never
-                recovered are placed from the written descriptions, and the Evidence colours
-                say so.
+                The outline follows a MOLA plan: a rounded inner bailey, the great hall in the
+                1960s trenches east of St Andrew&apos;s Road, the outer bailey to the south under
+                the station, and the former Nene on the west. Heights and roofs are still a
+                reconstruction. The Evidence colours say what is excavated, recorded, or only
+                inferred.
               </p>
               <p>
                 Drag to orbit, pinch or scroll to zoom. Arrow keys move through the years, E

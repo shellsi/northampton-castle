@@ -1,7 +1,10 @@
-export const BAILEY_W = 148;
-export const BAILEY_D = 99;
-export const HW = BAILEY_W / 2;
-export const HD = BAILEY_D / 2;
+import {
+  gatePoint,
+  places,
+  posternPoint,
+  southTowerPoint,
+  westWallPoint,
+} from "@/content/plan";
 
 export const eras = [
   {
@@ -120,30 +123,29 @@ export const skyFor: Record<Mood, string> = {
 export type Vec3 = [number, number, number];
 
 export const anchors = {
-  hall: [0, 0, -6] as Vec3,
-  greatChamber: [-26, 0, -6] as Vec3,
-  longChamber: [26, 0, -6] as Vec3,
-  queens: [0, 0, -22] as Vec3,
-  kitchen: [8, 0, 16] as Vec3,
-  apartments: [36, 0, -32] as Vec3,
-  keepNw: [-46, 0, -22] as Vec3,
-  keepNe: [40, 0, -30] as Vec3,
-  southTower: [0, 0, HD] as Vec3,
-  westWall: [-HW, 4, 0] as Vec3,
-  ditch: [0, 2, -HD - 28] as Vec3,
-  northGate: [0, 4, -HD] as Vec3,
-  postern: [-HW, 3, 22] as Vec3,
-  chapel: [48, 0, -8] as Vec3,
-  outer: [0, 2, -HD - 78] as Vec3,
-  barbican: [0, 3, -HD - 36] as Vec3,
-  river: [-150, 1, 0] as Vec3,
-  priory: [70, 0, -150] as Vec3,
-  town: [210, 0, 20] as Vec3,
-  earthwork: [20, 2, 10] as Vec3,
-  station: [-6, 4, 16] as Vec3,
-  posternToday: [-28, 2, 72] as Vec3,
-  bankToday: [86, 2, -8] as Vec3,
-  poles: [54, 2, 36] as Vec3,
+  hall: places.hall,
+  hallQuery: places.hallQuery,
+  greatChamber: places.greatChamber,
+  longChamber: places.longChamber,
+  queens: places.queens,
+  kitchen: places.kitchen,
+  apartments: places.apartments,
+  barrow: places.barrow,
+  southTower: [southTowerPoint[0], 6, southTowerPoint[2]] as Vec3,
+  westWall: westWallPoint,
+  ditch: places.ditch,
+  northGate: gatePoint,
+  postern: posternPoint,
+  chapel: places.chapel,
+  outer: places.outer,
+  fort: places.fort,
+  river: places.river,
+  priory: places.priory,
+  town: places.town,
+  earthwork: places.earthwork,
+  station: places.station,
+  posternToday: places.posternToday,
+  bankToday: places.bankToday,
 };
 
 export type Hotspot = {
@@ -223,21 +225,21 @@ export const hotspots: Hotspot[] = [
     confidence: "documented",
     position: anchors.northGate,
     dates: "Medieval",
-    summary: "The principal gate, on the north, with a causeway across the ditch.",
+    summary: "Where St Andrew's Road now enters the old bailey, with a causeway across the ditch.",
     detail:
-      "Plans show the north gate and a causeway that replaced an earlier drawbridge. A survey of 1322–3 says two old gates needed repair. A geophysical survey in 2017 found possible traces of the north gate under the St Andrew's Road site. In May 1215 rebel barons besieged the castle and failed to take it. The gatehouse drawn here is a typical form, not a measured elevation.",
+      "On the MOLA plan the north gate sits slightly east of centre, and St Andrew's Road runs in through it. A causeway replaced an earlier drawbridge. A survey of 1322–3 says two old gates needed repair. A geophysical survey in 2017 found possible traces of the north gate under the road. In May 1215 rebel barons besieged the castle and failed to take it. The gatehouse drawn here is a typical form, not a measured elevation.",
     sources: [{ label: "Inner bailey record", href: her }],
   },
   {
-    id: "barbican",
-    name: "Barbican",
-    eras: ["becket", "siege", "peak", "civilwar"],
-    confidence: "inferred",
-    position: anchors.barbican,
-    dates: "Medieval",
-    summary: "An outwork north of the ditch, known from earthworks rather than walls.",
+    id: "fort",
+    name: "The Fort",
+    eras: ["timber", "becket", "siege", "peak", "civilwar", "orchard", "demolition", "today"],
+    confidence: "recorded",
+    position: anchors.fort,
+    dates: "Surveyed 1863",
+    summary: "A rounded earthwork north of the ditch, west of where the road now runs.",
     detail:
-      "E. F. Law's 1863 survey shows earthworks of a barbican north of the inner bailey moat. The walled passage drawn here is a guess at what those earthworks supported.",
+      "The MOLA plan marks a rounded bank called The Fort, surveyed in 1863, just north of the inner ditch. It may be the barbican whose earthworks Law recorded. Only the bank is drawn. There is no standing wall to put a passage on.",
     sources: [{ label: "Inner bailey record", href: her }],
   },
   {
@@ -247,9 +249,9 @@ export const hotspots: Hotspot[] = [
     confidence: "inferred",
     position: anchors.outer,
     dates: "Medieval",
-    summary: "A second enclosure of about 3.5 acres, with no known medieval buildings.",
+    summary: "The enclosure south of the inner bailey. The station stands in it.",
     detail:
-      "A plan of 1743 gives the inner and outer baileys about 3.5 acres each, and the whole castle, defences included, about 15 acres. The outer bailey seems to have been open ground for mustering and for events such as tournaments. Its exact outline is poorly recorded, so this yard is only the idea of it. The 1460 battle of the Wars of the Roses was not fought here. It was near Delapré Abbey.",
+      "On the MOLA plan the outer bailey, labelled from an 1854 survey, lies south of the inner bailey. The station sits in its south-west corner, and a rebuilt postern stands near Black Lion Hill. No medieval buildings are recorded inside it. It reads as open ground for mustering. The 1460 battle of the Wars of the Roses was not fought here. It was near Delapré Abbey.",
     sources: [
       { label: "Inner bailey record", href: her },
       { label: "Friends of Northampton Castle timeline", href: fonc },
@@ -259,16 +261,28 @@ export const hotspots: Hotspot[] = [
     id: "hall",
     name: "Great Hall",
     eras: ["becket", "siege", "peak", "civilwar", "orchard", "demolition"],
-    confidence: "documented",
+    confidence: "excavated",
     position: anchors.hall,
     dates: "By 1164 – after 1329",
-    summary: "Where Becket was tried, and later where the justices sat.",
+    summary: "East of St Andrew's Road, in the 1961–64 trenches.",
     detail:
-      "Accounts of the 1164 trial name the hall, a lower inner chamber, and an upper chamber where the king sat while messengers went between them. Henry III had round windows added in 1244, the roof panelled in 1249, and painted glass and a king's chair in the 1250s. The hall, the Long Chamber, and the Great Chamber burned around 1318 and were repaired by 1329 for the itinerant justices. King John is said to have visited about thirty times and, in 1205, to have moved the treasury here. Medieval chess pieces from the site are in Northampton Museum. The footprint of the hall has not been fixed; this position is the centre of the bailey.",
+      "The MOLA plan labels the great hall in the yellow excavation zone east of St Andrew's Road, long north to south. Accounts of the 1164 trial name the hall, a lower inner chamber, and an upper chamber where the king sat while messengers went between them. Henry III had round windows added in 1244, the roof panelled in 1249, and painted glass and a king's chair in the 1250s. The hall, the Long Chamber, and the Great Chamber burned around 1318 and were repaired by 1329 for the itinerant justices. King John is said to have visited about thirty times and, in 1205, to have moved the treasury here. Medieval chess pieces from the site are in Northampton Museum. Roofs and the joins between rooms are still a reconstruction.",
     sources: [
       { label: "Great Hall record", href: hall },
       { label: "Friends of Northampton Castle timeline", href: fonc },
     ],
+  },
+  {
+    id: "hall-query",
+    name: "Hall?",
+    eras: ["becket", "siege", "peak", "civilwar", "orchard"],
+    confidence: "inferred",
+    position: anchors.hallQuery,
+    dates: "Uncertain",
+    summary: "A building in the west half of the bailey. The plan itself puts a question mark on it.",
+    detail:
+      "The MOLA plan marks a separate range west of the station car park as 'hall?'. The excavated great hall is the building east of St Andrew's Road. This one is drawn so the doubt stays visible. It is not a second certain hall.",
+    sources: [{ label: "Great Hall record", href: hall }],
   },
   {
     id: "great-chamber",
@@ -277,9 +291,9 @@ export const hotspots: Hotspot[] = [
     confidence: "documented",
     position: anchors.greatChamber,
     dates: "13th century",
-    summary: "The king's chamber, recorded to the west of the hall.",
+    summary: "The king's chamber, placed just west of the hall, toward the yard.",
     detail:
-      "The floor of the Great Chamber and its wardrobe was repaired in 1235. A reading of the 1322–3 survey puts this chamber west of the hall and the queen's Long Chamber to the east, as parts of one range. That arrangement is followed here and should be treated as a hypothesis.",
+      "The floor of the Great Chamber and its wardrobe was repaired in 1235. A reading of the 1322–3 survey puts this chamber west of the hall and the queen's Long Chamber to the east. Here that puts it between St Andrew's Road and the excavated hall. The join is a hypothesis.",
     sources: [{ label: "Great Hall record", href: hall }],
   },
   {
@@ -289,9 +303,9 @@ export const hotspots: Hotspot[] = [
     confidence: "documented",
     position: anchors.longChamber,
     dates: "13th century",
-    summary: "The queen's chamber, recorded to the east of the hall.",
+    summary: "The queen's chamber, set against the east bank beside the hall.",
     detail:
-      "Orders between 1236 and 1253 glaze the queen's chamber and the king's wardrobe, and call for painted white glass in the hall windows nearest the queen's door. The Long Chamber was destroyed in the same fire as the hall, around 1318.",
+      "Orders between 1236 and 1253 glaze the queen's chamber and the king's wardrobe, and call for painted white glass in the hall windows nearest the queen's door. The Long Chamber was destroyed in the same fire as the hall, around 1318. It is drawn on the bank side of the hall, east of the road.",
     sources: [{ label: "Great Hall record", href: hall }],
   },
   {
@@ -301,9 +315,9 @@ export const hotspots: Hotspot[] = [
     confidence: "documented",
     position: anchors.queens,
     dates: "12th–13th century",
-    summary: "An upper chamber north of the hall, used in the Becket accounts.",
+    summary: "An upper chamber on the north end of the hall, used in the Becket accounts.",
     detail:
-      "At the trial, Becket waited in a lower room while Henry II sat in an upper chamber. Later works put the queen's chamber on the north side of the hall, with the king's wardrobe nearby. The block drawn against the hall is that relationship, not a recovered plan.",
+      "At the trial, Becket waited in a lower room while Henry II sat in an upper chamber. Later works put the queen's chamber on the north side of the hall, with the king's wardrobe nearby. The block drawn on the north end of the east hall is that relationship, not a recovered plan.",
     sources: [{ label: "Great Hall record", href: hall }],
   },
   {
@@ -315,7 +329,7 @@ export const hotspots: Hotspot[] = [
     dates: "Medieval",
     summary: "A building in the 1960s trenches, a kitchen at least later in its life.",
     detail:
-      "Alexander's excavation on the east side of the inner bailey found a building interpreted as a kitchen range in its later use, and another that may have been part of the great hall. The kitchens here stand south of the hall so the excavated east side can also show the royal rooms against the bank.",
+      "Alexander's excavation on the east side of the inner bailey found a building interpreted as a kitchen range in its later use, and another that may have been part of the great hall. The kitchen stands at the south end of that same trench, beside the hall.",
     sources: [{ label: "Inner bailey record", href: her }],
   },
   {
@@ -331,15 +345,15 @@ export const hotspots: Hotspot[] = [
     sources: [{ label: "Inner bailey record", href: her }],
   },
   {
-    id: "keep",
-    name: "Keep",
-    eras: ["timber", "becket", "siege", "peak", "civilwar", "orchard", "demolition"],
-    confidence: "inferred",
-    position: anchors.keepNw,
-    dates: "By 1322, and perhaps much earlier",
-    summary: "A keep is named in 1322–3. Nobody has fixed where it stood.",
+    id: "barrow",
+    name: "Anglo-Saxon barrow",
+    eras: ["saxon", "timber", "becket", "siege", "peak", "civilwar", "orchard", "demolition"],
+    confidence: "recorded",
+    position: anchors.barrow,
+    dates: "Before the castle",
+    summary: "A burial mound in the north of the inner bailey, west of the gate.",
     detail:
-      "The 1322–3 survey mentions a keep as well as a new tower and six smaller towers. Hartshorne thought the keep was on the north-east. Law's 1863 survey shows a mound about 30 metres across in the north-west quarter, which may be the old motte. One reading of the Becket accounts is that the 'hall with chambers above' was the keep itself. Use the two placements in this card. Both are guesses.",
+      "The MOLA plan marks an Anglo-Saxon barrow here, in the north of the inner bailey. It is not labelled a motte or a keep. A keep is named in the 1322–3 survey, with a new tower and six smaller towers, but this plan does not place it. The mound drawn is the barrow.",
     sources: [{ label: "Inner bailey record", href: her }],
   },
   {
@@ -390,7 +404,7 @@ export const hotspots: Hotspot[] = [
     dates: "Medieval",
     summary: "A small arch on the west side. The stones survive, but not here.",
     detail:
-      "The postern has an arch of semi-Norman character and stood on the west side. When the station was built, the railway company took it down and rebuilt it in the boundary wall as a memorial, faced with castle ashlar. The arch you can visit is that rebuilt one. This mark is its medieval side of the castle, not its modern spot.",
+      "The MOLA plan puts the original postern on the west wall of the inner bailey, toward the north-west. The arch is semi-Norman. When the station was built, the railway company took it down and rebuilt it in the boundary wall of the outer bailey, near Black Lion Hill, faced with castle ashlar. This mark is the medieval gate. The arch you can visit is the rebuilt one, further south.",
     sources: [
       {
         label: "Postern record",
@@ -422,9 +436,9 @@ export const hotspots: Hotspot[] = [
     confidence: "survives",
     position: anchors.station,
     dates: "1879 – today",
-    summary: "Castle Station was built on the castle in 1879 and rebuilt in 1963–64.",
+    summary: "The station stands in the outer bailey, south of the inner bailey.",
     detail:
-      "The main line had bypassed the town. In 1879 a loop brought the railway through the castle, and the London and North Western Railway demolished the remains for the station. The 1963–64 rebuild dropped the word Castle from the name, because by then it was the only station. The building drawn here is a stand-in for today's station, not a model of the architecture.",
+      "The main line had bypassed the town. In 1879 a loop brought the railway through the castle, and the London and North Western Railway demolished the remains for the station. On the MOLA plan the tracks and the station occupy the outer bailey. The inner bailey is the station car park, with St Andrew's Road between the car park and the great hall. The 1963–64 rebuild dropped the word Castle from the name. The building drawn here is a stand-in, not a model of the architecture.",
     sources: [{ label: "Wikipedia, Northampton Castle", href: wiki }],
   },
   {
@@ -434,9 +448,9 @@ export const hotspots: Hotspot[] = [
     confidence: "survives",
     position: anchors.posternToday,
     dates: "Rebuilt 1879",
-    summary: "The only standing masonry, moved to the station entrance.",
+    summary: "The only standing masonry, rebuilt by the station at Black Lion Hill.",
     detail:
-      "It stands by the station approach at Black Lion Hill, no longer at the top of the castle bank. The wall it sits in is faced with reused castle stone. It is a minor arch, and it is the one piece of the building you can touch.",
+      "It stands in the outer bailey, by the station approach at Black Lion Hill, not on the west wall where the medieval postern was. The wall it sits in is faced with reused castle stone. It is a minor arch, and it is the one piece of the building you can touch.",
     sources: [{ label: "Wikipedia, Northampton Castle", href: wiki }],
   },
   {
@@ -482,30 +496,30 @@ export const tours: Tour[] = [
     beats: [
       {
         eraId: "saxon",
-        position: [180, 120, 160],
-        target: [10, 0, 0],
+        position: [160, 130, 210],
+        target: [0, 0, 20],
         caption:
           "Before any castle, people were already here. The early town sat on this rise above a branch of the River Nene, around Chalk Lane and St Peter's Street, inside an earthwork.",
       },
       {
         eraId: "saxon",
-        position: [40, 18, 36],
-        target: [16, 1, 8],
+        position: [36, 16, 32],
+        target: [12, 1, 6],
         caption:
           "Under the later bank, diggers found late Saxon pottery. In 2012 a brooch, more pottery, and an ironstone wall came up. The houses in front of you are a sketch of that occupation. No plan of them survives.",
       },
       {
         eraId: "timber",
-        position: [90, 55, 80],
-        target: [-20, 4, -10],
+        position: [90, 55, 100],
+        target: [10, 4, 0],
         caption:
           "After the Conquest a castle rose on the hill, first in earth and timber. Simon de Senlis, Earl of Northampton, is credited with the stone castle. It is missing from Domesday Book in 1086, and it was well underway when he left on crusade in 1095.",
       },
       {
         eraId: "becket",
         mood: "day",
-        position: [130, 80, 120],
-        target: [0, 6, 0],
+        position: [130, 80, 140],
+        target: [10, 6, 10],
         caption:
           "The stone curtain around the inner bailey was probably built between 1153 and 1164. The bank under it was vast: where it was sectioned, the original rampart was judged about 18 metres wide and 6 metres high. A scrap of the eastern bank is still in the park.",
       },
@@ -519,56 +533,56 @@ export const tours: Tour[] = [
     beats: [
       {
         eraId: "becket",
-        position: [160, 110, 150],
-        target: [0, 4, 0],
+        position: [140, 100, 190],
+        target: [20, 4, 20],
         caption:
           "October 1164. Henry II has called a great council to Northampton Castle and summoned Thomas Becket, Archbishop of Canterbury, to answer before it.",
       },
       {
         eraId: "becket",
-        position: [18, 14, -92],
-        target: [0, 3, -40],
+        position: [20, 16, -108],
+        target: [28, 4, -53],
         caption:
           "Becket comes in from the north, across the ditch. He and the king had been close. By now Becket was the king's most stubborn opponent, and he arrived carrying his own cross.",
       },
       {
         eraId: "becket",
-        position: [14, 7, 22],
-        target: [0, 3, -6],
+        position: [30, 8, 32],
+        target: [50, 3, 6],
         caption:
           "He gets off his horse at the door of the hall. The cross is a challenge, and everyone in the yard can see it.",
       },
       {
         eraId: "becket",
         cutaway: true,
-        position: [-20, 32, 22],
-        target: [0, 2, -10],
+        position: [32, 34, 28],
+        target: [50, 2, 6],
         caption:
           "He waits in a lower chamber. Above him, the king and the barons sit in an upper room. Messengers go back and forth. The hall, the lower room, and the upper room are all named in accounts of the trial. How they joined is inferred, which is why the roof is lifted off.",
       },
       {
         eraId: "becket",
         cutaway: true,
-        position: [18, 26, 24],
-        target: [0, 2, -8],
+        position: [36, 28, 30],
+        target: [50, 2, 6],
         caption:
           "The council condemns him. Becket refuses the judgement and walks out through a hostile crowd.",
       },
       {
         eraId: "becket",
         mood: "night",
-        position: [-48, 12, 30],
-        target: [-74, 4, 22],
+        position: [-40, 14, -8],
+        target: [-64, 4, -27],
         caption:
           "That night he leaves dressed as a monk. He reaches France, and six years of exile begin. Knights will kill him at Canterbury in 1170.",
       },
       {
         eraId: "today",
         mood: "day",
-        position: [-10, 48, 110],
-        target: [-4, 2, 8],
+        position: [24, 42, 48],
+        target: [48, 1, 8],
         caption:
-          "The hall was on ground the station and its car parks now cover. The only masonry still above ground is the postern by the entrance, and the railway moved it here in 1879.",
+          "The hall stood east of St Andrew's Road, beyond the car park. The station is in the outer bailey to the south. The only masonry still above ground is the postern the railway rebuilt by the station in 1879.",
       },
     ],
   },
@@ -580,36 +594,36 @@ export const tours: Tour[] = [
     beats: [
       {
         eraId: "siege",
-        position: [40, 70, 180],
-        target: [20, 0, -40],
+        position: [30, 78, 230],
+        target: [10, 0, 40],
         caption:
           "On 3 April 1264 Henry III raised his standard at Oxford and marched on Northampton. The castle was held for Simon de Montfort. The king came ready for a long siege.",
       },
       {
         eraId: "siege",
-        position: [-20, 22, 130],
-        target: [10, 0, 70],
+        position: [50, 24, 240],
+        target: [48, 2, 188],
         caption:
           "The engines were set up on the meadows south of the town, on the ground now called Beckets Park. The camp in front of you is in the right direction. It is not a surveyed position.",
       },
       {
         eraId: "siege",
-        position: [20, 28, -90],
-        target: [70, 2, -150],
+        position: [40, 32, -80],
+        target: [96, 3, -158],
         caption:
           "At dawn on 5 April the main attack struck the south gate of the town. Prince Edward rode around to the north and found a weak place in the garden wall of St Andrew's Priory. The wall gave way. Chroniclers say the gap was wide enough for forty horses.",
       },
       {
         eraId: "siege",
-        position: [-110, 18, 20],
-        target: [-74, 5, 0],
+        position: [-120, 22, 24],
+        target: [-70, 5, 10],
         caption:
           "Simon de Montfort the Younger was pulled from his horse and captured at the breach. Most of the defenders fell back into the castle. They were buying little time: the west wall had been propped with timber since the late 1250s, and it would collapse outright in 1266.",
       },
       {
         eraId: "siege",
-        position: [16, 16, -80],
-        target: [0, 5, -49],
+        position: [8, 16, -100],
+        target: [28, 5, -53],
         caption:
           "On the morning of 6 April the garrison surrendered. The castle was the king's again. The heavy buttresses on the west wall, recorded when the railway demolished them, belong to the rebuild that followed.",
       },
@@ -623,29 +637,29 @@ export const tours: Tour[] = [
     beats: [
       {
         eraId: "civilwar",
-        position: [24, 16, 78],
-        target: [0, 8, 49],
+        position: [-28, 18, 96],
+        target: [-16, 8, 57],
         caption:
           "In the Civil War the castle was held for Parliament. In 1643 the south tower, called the Ring, was paved so a cannon could stand on it. A brass gun on the Ring is recorded in 1645.",
       },
       {
         eraId: "orchard",
-        position: [70, 40, 70],
-        target: [0, 2, 0],
+        position: [100, 48, 90],
+        target: [8, 2, 16],
         caption:
           "In 1662 Charles II ordered the town walls and the castle defences slighted, because Northampton had sided with Parliament. The ruins were the county gaol until 1675. By about 1729 the interior was orchard and pasture, planted with cherries and gooseberries.",
       },
       {
         eraId: "demolition",
-        position: [-90, 24, 40],
-        target: [-70, 4, 0],
+        position: [-110, 28, 30],
+        target: [-70, 4, 12],
         caption:
           "The Crown sold the site in lots from 1813. The London and North Western Railway bought it in stages and, in 1879, demolished what remained for Castle Station, despite a county petition. Antiquarians stood in the cuttings and drew the west wall, its buttresses, and the south tower as they came down.",
       },
       {
         eraId: "today",
-        position: [-40, 28, 100],
-        target: [-20, 2, 60],
+        position: [-36, 24, 198],
+        target: [-8, 2, 160],
         caption:
           "The company rebuilt the postern into the station wall as a memorial. In July 2025, poles in Castle Park were set along the old perimeter. Between the postern, the bank east of St Andrew's Road, and the buried ditch, that is what is left.",
       },
@@ -654,8 +668,8 @@ export const tours: Tour[] = [
 ];
 
 export const overviewCamera = {
-  position: [168, 128, 172] as Vec3,
-  target: [0, 0, 0] as Vec3,
+  position: [150, 140, 230] as Vec3,
+  target: [8, 0, 40] as Vec3,
 };
 
 export function eraById(id: EraId) {

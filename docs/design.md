@@ -4,7 +4,7 @@ Status: draft v0.1 · Companion to [`research.md`](research.md) (source keys suc
 refer to that file).
 
 The first build is a personal web app, including phones, with captions and no narration.
-The model in that app is a schematic of the dimensions below, not a measured survey.
+The model in that app follows a MOLA plan of the castle: a rounded inner bailey, the great hall east of St Andrew's Road, and the outer bailey to the south. Heights and roofs are still a schematic, not a measured survey. An older antiquarian reading of a 148 by 99 metre rectangle is recorded in the research notes.
 
 ## 1. Vision
 
@@ -177,8 +177,8 @@ engine.
 - Georeference the historical maps (Speed 1610, Noble & Butlin 1746, *Gentleman's Magazine*
   1800, Law 1863, the first OS 1:500 town plan) against modern OS OpenMap and the station
   footprint.
-- Fit the inner bailey to the 486 × 324 ft (148 × 99 m) dimensions and the curtain positions
-  recorded on the south and west sides.
+- Fit the inner bailey to the rounded outline on the MOLA plan, with the 1879 curtain
+  recorded around the west and south tower, rather than to the older 486 × 324 ft rectangle.
 
 ### 5.3 Architecture
 

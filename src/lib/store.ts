@@ -23,7 +23,6 @@ type CastleState = {
   beatIndex: number;
   playing: boolean;
   intro: boolean;
-  keepSite: "nw" | "ne";
   mood: Mood | null;
   cutaway: boolean;
   camera: CameraShot;
@@ -39,7 +38,6 @@ type CastleState = {
   prevBeat: () => void;
   setPlaying: (playing: boolean) => void;
   dismissIntro: () => void;
-  setKeepSite: (site: "nw" | "ne") => void;
   resetCamera: () => void;
 };
 
@@ -71,7 +69,6 @@ export const useCastle = create<CastleState>((set, get) => ({
   beatIndex: 0,
   playing: false,
   intro: true,
-  keepSite: "nw",
   mood: null,
   cutaway: false,
   camera: overviewCamera,
@@ -114,7 +111,6 @@ export const useCastle = create<CastleState>((set, get) => ({
   },
   setPlaying: (playing) => set({ playing }),
   dismissIntro: () => set({ intro: false }),
-  setKeepSite: (site) => set({ keepSite: site }),
   resetCamera: () => {
     const { eraId, cameraNonce } = get();
     const era = eraById(eraId);

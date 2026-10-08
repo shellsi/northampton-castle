@@ -45,13 +45,13 @@ function Lighting() {
         shadow-mapSize-height={1024}
         shadow-camera-near={10}
         shadow-camera-far={520}
-        shadow-camera-left={-190}
-        shadow-camera-right={190}
-        shadow-camera-top={190}
-        shadow-camera-bottom={-190}
+        shadow-camera-left={-240}
+        shadow-camera-right={240}
+        shadow-camera-top={240}
+        shadow-camera-bottom={-240}
       />
       {night && (
-        <pointLight position={[-62, 6, 24]} intensity={40} distance={90} color="#ffcc88" />
+        <pointLight position={[-64, 6, -27]} intensity={40} distance={90} color="#ffcc88" />
       )}
     </>
   );
@@ -122,7 +122,7 @@ export default function CastleCanvas() {
     <Canvas
       shadows="percentage"
       dpr={[1, 1.6]}
-      camera={{ position: [168, 128, 172], fov: 40, near: 0.4, far: 2000 }}
+      camera={{ position: [150, 140, 230], fov: 40, near: 0.4, far: 2000 }}
       gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
       onCreated={({ gl }) => {
         gl.toneMappingExposure = 1.05;

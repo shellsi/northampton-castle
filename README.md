@@ -2,7 +2,7 @@
 
 A browser history of Northampton Castle, the royal castle west of medieval Northampton that the railway demolished in 1879. Drag the model, move through nine moments from about 1050 to the station that stands there now, and follow four captioned stories. Nothing is read aloud.
 
-The model is a schematic. The inner bailey uses the recorded size of about 148 by 99 metres, and every place is marked by how it is known: still standing, excavated, recorded before demolition, named in documents, or inferred. It is not a measured survey.
+The model is a schematic traced from a MOLA plan: a rounded inner bailey, the great hall east of St Andrew's Road, the outer bailey to the south under the station, and the former River Nene on the west. Every place is marked by how it is known: still standing, excavated, recorded before demolition, named in documents, or inferred. Heights and roofs are a reconstruction, not a measured survey.
 
 The research notes and the design are in [`docs/research.md`](docs/research.md) and [`docs/design.md`](docs/design.md).
 

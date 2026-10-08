@@ -1,20 +1,18 @@
 "use client";
 
-import { anchors, confidenceMeta, hotspots, type EraId } from "@/content/site";
+import { confidenceMeta, hotspots, type EraId } from "@/content/site";
 import { useCastle } from "@/lib/store";
 
 export function HotspotMarkers({ era }: { era: EraId }) {
   const selectedId = useCastle((state) => state.selectedId);
   const select = useCastle((state) => state.select);
-  const keepSite = useCastle((state) => state.keepSite);
 
   return (
     <group>
       {hotspots
         .filter((hotspot) => hotspot.eras.includes(era))
         .map((hotspot) => {
-          const position =
-            hotspot.id === "keep" && keepSite === "ne" ? anchors.keepNe : hotspot.position;
+          const position = hotspot.position;
           const selected = selectedId === hotspot.id;
           const color = selected ? "#f3e2c2" : confidenceMeta[hotspot.confidence].swatch;
           return (
