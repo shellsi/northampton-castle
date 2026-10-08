@@ -88,7 +88,7 @@ function Rig() {
       ref={controls}
       minDistance={12}
       maxDistance={480}
-      maxPolarAngle={Math.PI / 2.08}
+      maxPolarAngle={Math.PI / 2 - 0.42}
       minPolarAngle={0.18}
       smoothTime={reduced ? 0 : 0.5}
     />
@@ -120,7 +120,7 @@ function World() {
 export default function CastleCanvas() {
   return (
     <Canvas
-      shadows
+      shadows="percentage"
       dpr={[1, 1.6]}
       camera={{ position: [168, 128, 172], fov: 40, near: 0.4, far: 2000 }}
       gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}

@@ -18,7 +18,7 @@ export function ModernSite({ ghostOpacity }: { ghostOpacity: number }) {
       )}
       <mesh position={[-4, 0.18, 10]} receiveShadow>
         <boxGeometry args={[16, 0.28, 280]} />
-        <Mat kind="asphalt" evidenceAware={false} />
+        <Mat kind="asphalt" confidence="survives" />
       </mesh>
       {[-2.1, 2.1].map((x) => (
         <mesh key={x} position={[x, 0.42, 10]}>
@@ -28,29 +28,29 @@ export function ModernSite({ ghostOpacity }: { ghostOpacity: number }) {
       ))}
       <mesh position={[-9, 0.35, 12]} receiveShadow>
         <boxGeometry args={[6, 0.4, 150]} />
-        <Tint color="#d5d2cb" />
+        <Mat kind="plaster" confidence="survives" />
       </mesh>
       <mesh position={[5, 0.35, 12]} receiveShadow>
         <boxGeometry args={[5, 0.4, 150]} />
-        <Tint color="#d5d2cb" />
+        <Mat kind="plaster" confidence="survives" />
       </mesh>
       <group position={[-8, 0, 18]}>
         <mesh position={[0, 4.2, 0]} castShadow receiveShadow>
           <boxGeometry args={[22, 8.4, 78]} />
-          <Mat kind="plaster" evidenceAware={false} />
+          <Mat kind="plaster" confidence="survives" />
         </mesh>
         <mesh position={[0, 6.2, 0]}>
           <boxGeometry args={[22.4, 2.2, 78.4]} />
-          <Tint color="#8eb4c4" metalness={0.15} roughness={0.2} />
+          <Mat kind="plaster" confidence="survives" />
         </mesh>
         <mesh position={[0, 8.7, 0]} castShadow>
           <boxGeometry args={[26, 0.5, 84]} />
-          <Tint color="#5e656b" metalness={0.4} />
+          <Mat kind="iron" confidence="survives" metalness={0.4} roughness={0.45} />
         </mesh>
       </group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[36, 0.08, 42]} receiveShadow>
         <planeGeometry args={[48, 60]} />
-        <Mat kind="asphalt" evidenceAware={false} />
+        <Mat kind="asphalt" confidence="survives" />
       </mesh>
       <mesh position={[64, 0.12, 0]} receiveShadow>
         <boxGeometry args={[14, 0.2, 280]} />

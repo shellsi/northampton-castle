@@ -1,6 +1,7 @@
 "use client";
 
 import { BAILEY_D, BAILEY_W, HD, HW, type Confidence, type EraId } from "@/content/site";
+import * as THREE from "three";
 import { useCastle } from "@/lib/store";
 import { GhostScope, Mat, Tint } from "@/components/castle/materials";
 import {
@@ -319,6 +320,41 @@ function SiegeCamp() {
   );
 }
 
+function CivilWar() {
+  return (
+    <group>
+      <mesh position={[0, 1.6, HD + 32]} scale={[1.3, 0.28, 0.42]}>
+        <sphereGeometry args={[26, 18, 12]} />
+        <Mat kind="earth" confidence="documented" />
+      </mesh>
+      <mesh position={[HW + 26, 1.5, 4]} scale={[0.38, 0.26, 1.15]}>
+        <sphereGeometry args={[28, 18, 12]} />
+        <Mat kind="earth" confidence="documented" />
+      </mesh>
+      <mesh position={[0, 14.15, HD]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[6.4, 20]} />
+        <Mat kind="stone" confidence="recorded" side={THREE.DoubleSide} />
+      </mesh>
+      <group position={[18, 3.2, HD + 30]} rotation={[0.2, 0.4, 0]}>
+        <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
+          <cylinderGeometry args={[0.45, 0.55, 3.6, 12]} />
+          <Tint color="#2c3034" metalness={0.55} roughness={0.35} />
+        </mesh>
+      </group>
+      {[
+        [-16, HD + 24],
+        [8, HD + 22],
+        [HW + 18, -10],
+      ].map(([x, z], index) => (
+        <mesh key={index} position={[x, 1.5, z]} castShadow>
+          <coneGeometry args={[2.2, 3, 8]} />
+          <Tint color="#6d2f2a" />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 function OuterWard() {
   return (
     <group>
@@ -410,6 +446,7 @@ export function HistoricalSite({
           <SiegeCamp />
         </>
       )}
+      {era === "civilwar" && <CivilWar />}
       {(era === "orchard" || era === "demolition") && (
         <Trees count={era === "orchard" ? 18 : 7} spread={[110, 70]} />
       )}
