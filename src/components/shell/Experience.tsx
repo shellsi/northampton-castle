@@ -162,7 +162,7 @@ export function Experience() {
       <div className="fixed inset-0 bg-[#c9d5dc] text-foreground">
         <h1 className="sr-only">Northampton Castle, an interactive history</h1>
         <div className="absolute inset-0 touch-none">
-          {webgl === "yes" ? <CastleCanvas /> : null}
+          {webgl !== "no" ? <CastleCanvas /> : null}
         </div>
 
         <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between gap-2 p-3">
@@ -315,7 +315,7 @@ export function Experience() {
           </div>
         </div>
 
-        {intro && webgl === "yes" && (
+        {intro && webgl !== "no" && (
           <div className="pointer-events-none absolute inset-0 z-30 flex items-end justify-center p-4 sm:items-center">
             <div className="pointer-events-auto w-full max-w-md rounded-2xl bg-popover p-5 shadow-2xl">
               <p className="text-sm text-primary">A royal castle, then a railway station</p>
